@@ -518,20 +518,27 @@ BEGIN
 
     -- Tạo hóa đơn mới
     DECLARE @hoa_don_id INT;
-    INSERT INTO Invoices (student_id, total_amount, payment_status, created_at)
+    INSERT INTO HoaDon(ma_sinh_vien, tong_so_tien, trang_thai_thanh_toan, ngay_tao)
     VALUES (@ma_sinh_vien, @tong_tien, N'Chưa thanh toán', GETDATE());
 
     SET @hoa_don_id = SCOPE_IDENTITY();
+	declare @so_luong int;
+	set @so_luong = (SELECT count(ma_dang_ky)
+                      FROM DangKyDichVu sr
+                      JOIN DichVu s ON sr.ma_dich_vu = s.ma_dich_vu
+                      WHERE sr.ma_sinh_vien = @ma_sinh_vien AND sr.trang_thai = N'Đang sử dụng');
 
     -- Thêm chi tiết hóa đơn
-    INSERT INTO Invoice_Details (invoice_id, service_id, amount)
-    SELECT @hoa_don_id, s.service_id, s.price
-    FROM Service_Registrations sr
-    JOIN Services s ON sr.service_id = s.service_id
-    WHERE sr.student_id = @ma_sinh_vien AND sr.status = N'Đang sử dụng';
+    INSERT INTO ChiTietHoaDon(ma_hoa_don, ma_dich_vu, so_luong,so_tien)
+    SELECT @hoa_don_id, s.ma_dich_vu, @so_luong,@tong_tien
+    FROM DangKyDichVu sr
+    JOIN DichVu s ON sr.ma_dich_vu = s.ma_dich_vu
+    WHERE sr.ma_sinh_vien = @ma_sinh_vien AND sr.trang_thai = N'Đang sử dụng';
 
     PRINT N'Hóa đơn đã được tạo thành công.';
 END;
+exec TaoHoaDon 4
+select * from ChiTietHoaDon
 
 -- Xem danh sách hóa đơn của sinh viên
 IF OBJECT_ID('XemDanhSachHoaDon', 'P') IS NOT NULL
