@@ -21,111 +21,81 @@ namespace quanLyktx
 
         private void FrmThueTraPhong_Load(object sender, EventArgs e)
         {
-            cboMaPhong.DataSource = kn.Lay_DulieuBang("SELECT ma_phong FROM PHONG");
+            gdvPhongchothue.DataSource = kn.Lay_DulieuBang("SELECT * FROM vw_DanhSachThueTraPhong");
+
+            
+            cboMaPhong.DataSource = kn.Lay_DulieuBang("SELECT ma_phong FROM vw_DanhSachPhongMa");
             cboMaPhong.DisplayMember = "ma_phong";
-            cboMaPhong.ValueMember = "ma_phong";
 
             
-            cboSoPhong.DataSource = kn.Lay_DulieuBang("SELECT DISTINCT so_phong FROM PHONG");
+            cboSoPhong.DataSource = kn.Lay_DulieuBang("SELECT so_phong FROM vw_DanhSachSoPhong");
             cboSoPhong.DisplayMember = "so_phong";
-            cboSoPhong.ValueMember = "so_phong";
 
-            
-            cboGioiTinh.Items.Add("Nam");
-            cboGioiTinh.Items.Add("Nữ");
 
-           
-            Load_ThueTraPhong();
         }
-        private void Load_ThueTraPhong()
-        {
-            string sql = "SELECT * FROM THUETRAPHONG";
-            gdvPhongchothue.DataSource = kn.Lay_DulieuBang(sql);
-        }
-
+        
         private void btnTaoMoi_Click(object sender, EventArgs e)
         {
-            try
-            {
-                string maPhong = cboMaPhong.SelectedValue?.ToString();
-                string soPhong = cboSoPhong.SelectedItem?.ToString();
-                string khoangThoiGian = txtThoigianthue.Text.Trim();
-                string tinhTuNgay = datetimeChoThue.Value.ToString("yyyy-MM-dd");
-                string maSV = txtMaSV.Text.Trim();
-                string gioiTinh = cboGioiTinh.SelectedItem?.ToString();
+            string maPhong = cboMaPhong.Text;
+            string soPhong = cboSoPhong.Text;
+            string khoangThoiGian = txtThoigianthue.Text;
+            string tinhTuNgay = datetimeChoThue.Value.ToString("yyyy-MM-dd");
+            string maSV = txtMaSV.Text;
+            string gioiTinh = cboGioiTinh.Text;
 
-                if (string.IsNullOrEmpty(maPhong) || string.IsNullOrEmpty(maSV))
-                {
-                    MessageBox.Show("Vui lòng nhập đầy đủ thông tin!", "Thông báo");
-                    return;
-                }
+            string sql = $"EXEC sp_ThemThuePhong '{maPhong}', '{soPhong}', N'{khoangThoiGian}', '{tinhTuNgay}', '{maSV}', N'{gioiTinh}'";
+            kn.Thucthi(sql);
 
-                string sql = $@"INSERT INTO THUETRAPHONG (ma_phong, so_phong, khoang_thoi_gian, tinh_tu_ngay, ma_sinh_vien, gioi_tinh)
-                        VALUES ('{maPhong}', '{soPhong}', N'{khoangThoiGian}', '{tinhTuNgay}', '{maSV}', N'{gioiTinh}')";
-                kn.Thucthi(sql);
-                Load_ThueTraPhong();
-                MessageBox.Show("Thêm mới thành công!");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi thêm: " + ex.Message);
-            }
+            MessageBox.Show("Thêm mới thành công!");
+            gdvPhongchothue.DataSource = kn.Lay_DulieuBang("SELECT * FROM vw_DanhSachThueTraPhong");
         }
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            if (gdvPhongchothue.CurrentRow != null)
-            {
-                string maPhong = gdvPhongchothue.CurrentRow.Cells["ma_phong"].Value.ToString();
-                string maSV = gdvPhongchothue.CurrentRow.Cells["ma_sinh_vien"].Value.ToString();
+            string maPhong = cboMaPhong.Text;
+            string maSV = txtMaSV.Text;
 
-                DialogResult r = MessageBox.Show("Bạn có chắc chắn muốn xóa?", "Xác nhận", MessageBoxButtons.YesNo);
-                if (r == DialogResult.Yes)
-                {
-                    string sql = $@"DELETE FROM THUETRAPHONG 
-                            WHERE ma_phong = '{maPhong}' AND ma_sinh_vien = '{maSV}'";
-                    kn.Thucthi(sql);
-                    Load_ThueTraPhong();
-                }
+            DialogResult result = MessageBox.Show("Bạn có chắc chắn muốn xóa không?", "Xác nhận", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                string sql = $"EXEC sp_XoaThuePhong '{maPhong}', '{maSV}'";
+                kn.Thucthi(sql);
+
+                MessageBox.Show("Xóa thành công!");
+                gdvPhongchothue.DataSource = kn.Lay_DulieuBang("SELECT * FROM vw_DanhSachThueTraPhong");
             }
         }
 
         private void btnChinh_Click(object sender, EventArgs e)
         {
-            try
-            {
-                string maPhong = cboMaPhong.SelectedValue?.ToString();
-                string soPhong = cboSoPhong.SelectedItem?.ToString();
-                string khoangThoiGian = txtThoigianthue.Text.Trim();
-                string tinhTuNgay = datetimeChoThue.Value.ToString("yyyy-MM-dd");
-                string maSV = txtMaSV.Text.Trim();
-                string gioiTinh = cboGioiTinh.SelectedItem?.ToString();
+            string maPhong = cboMaPhong.Text;
+            string soPhong = cboSoPhong.Text;
+            string khoangThoiGian = txtThoigianthue.Text;
+            string tinhTuNgay = datetimeChoThue.Value.ToString("yyyy-MM-dd");
+            string maSV = txtMaSV.Text;
+            string gioiTinh = cboGioiTinh.Text;
 
-                string sql = $@"UPDATE THUETRAPHONG 
-                        SET so_phong = '{soPhong}', khoang_thoi_gian = N'{khoangThoiGian}', 
-                            tinh_tu_ngay = '{tinhTuNgay}', gioi_tinh = N'{gioiTinh}'
-                        WHERE ma_phong = '{maPhong}' AND ma_sinh_vien = '{maSV}'";
-                kn.Thucthi(sql);
-                Load_ThueTraPhong();
-                MessageBox.Show("Cập nhật thành công!");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi cập nhật: " + ex.Message);
-            }
+            string sql = $"EXEC sp_CapNhatThuePhong '{maPhong}', '{soPhong}', N'{khoangThoiGian}', '{tinhTuNgay}', '{maSV}', N'{gioiTinh}'";
+            kn.Thucthi(sql);
+
+            MessageBox.Show("Cập nhật thành công!");
+            gdvPhongchothue.DataSource = kn.Lay_DulieuBang("SELECT * FROM vw_DanhSachThueTraPhong");
         }
+
 
         private void btnTimKiem_Click(object sender, EventArgs e)
         {
-            string sql = "SELECT * FROM THUETRAPHONG WHERE 1=1";
+            string sql = "";
 
-            if (rdoMaPhong.Checked && !string.IsNullOrEmpty(txtMaPhong.Text))
+            if (rdoMaPhong.Checked)
             {
-                sql += $" AND ma_phong = '{txtMaPhong.Text.Trim()}'";
+                string maPhong = txtMaPhong.Text;
+                sql = $"EXEC sp_TimKiemThuePhong @ma_phong = '{maPhong}', @so_phong = NULL";
             }
-            else if (rdoSoPhong.Checked && !string.IsNullOrEmpty(txtSoPhong.Text))
+            else if (rdoSoPhong.Checked)
             {
-                sql += $" AND so_phong = '{txtSoPhong.Text.Trim()}'";
+                string soPhong = txtSoPhong.Text;
+                sql = $"EXEC sp_TimKiemThuePhong @ma_phong = NULL, @so_phong = '{soPhong}'";
             }
 
             gdvPhongchothue.DataSource = kn.Lay_DulieuBang(sql);

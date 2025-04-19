@@ -29,7 +29,7 @@ namespace quanLyktx
         }
         void LoadData()
         {
-            string sql = "SELECT * FROM SinhVien";
+            string sql = "SELECT * FROM v_DanhSachSinhVien";
             dgvDichvu.DataSource = kn.Lay_DulieuBang(sql);
         }
 
@@ -49,52 +49,73 @@ namespace quanLyktx
 
         private void btnTaoMoi_Click(object sender, EventArgs e)
         {
-            if (txtTenSV.Text == "" || cboGioiTinh.SelectedIndex == -1 || txtSoDT.Text == "" || txtEmail.Text == "")
+            if (string.IsNullOrWhiteSpace(txtTenSV.Text) || cboGioiTinh.SelectedIndex == -1 ||
+                string.IsNullOrWhiteSpace(txtSoDT.Text) || string.IsNullOrWhiteSpace(txtEmail.Text))
             {
                 MessageBox.Show("Vui lòng nhập đầy đủ thông tin!", "Thiếu dữ liệu");
                 return;
             }
 
-            string checkSql = $"SELECT COUNT(*) FROM SinhVien WHERE ma_sinh_vien = '{txtMaSV.Text}'";
-            DataTable dtCheck = kn.Lay_DulieuBang(checkSql);
-            if (Convert.ToInt32(dtCheck.Rows[0][0]) > 0)
+            try
             {
-                MessageBox.Show("Mã sinh viên đã tồn tại!", "Trùng mã");
-                return;
+                string sql = $"EXEC ThemSinhVien N'{txtTenSV.Text}', N'{cboGioiTinh.Text}', " +
+                             $"'{dateTimeNS.Value:yyyy-MM-dd}', '{txtSoDT.Text}', '{txtEmail.Text}'";
+
+                kn.Thucthi(sql);
+                LoadData();
+                MessageBox.Show("Thêm sinh viên thành công!");
             }
-
-            string sql = $"INSERT INTO SinhVien (ho_ten, gioi_tinh, ngay_sinh, dien_thoai, email) " +
-             $"VALUES (N'{txtTenSV.Text}', N'{cboGioiTinh.Text}', " +
-             $"'{dateTimeNS.Value:yyyy-MM-dd}', '{txtSoDT.Text}', '{txtEmail.Text}')";
-
-            kn.Thucthi(sql);
-            LoadData();
-            MessageBox.Show("Thêm thành công!");
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi thêm: {ex.Message}");
+            }
         }
 
         private void btnChinhSua_Click(object sender, EventArgs e)
         {
-            string sql = $"UPDATE SinhVien SET " +
-              $"ho_ten = N'{txtTenSV.Text}', " +
-              $"gioi_tinh = N'{cboGioiTinh.Text}', " +
-              $"ngay_sinh = '{dateTimeNS.Value:yyyy-MM-dd}', " +
-              $"dien_thoai = '{txtSoDT.Text}', " +
-              $"email = '{txtEmail.Text}' " +
-              $"WHERE ma_sinh_vien = '{txtMaSV.Text}'";
+            if (string.IsNullOrWhiteSpace(txtMaSV.Text))
+            {
+                MessageBox.Show("Vui lòng chọn sinh viên cần sửa!");
+                return;
+            }
 
-            kn.Thucthi(sql);
-            LoadData();
-            MessageBox.Show("Cập nhật thành công!");
+            string sql = $"EXEC CapNhatSinhVien {txtMaSV.Text}, N'{txtTenSV.Text}', N'{cboGioiTinh.Text}', " +
+                         $"'{dateTimeNS.Value:yyyy-MM-dd}', '{txtSoDT.Text}', '{txtEmail.Text}'";
+
+            try
+            {
+                kn.Thucthi(sql);
+                LoadData();
+                MessageBox.Show("Cập nhật thành công!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi cập nhật: {ex.Message}");
+            }
         }
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            DialogResult r = MessageBox.Show("Bạn chắc chắn muốn xóa?", "Xác nhận", MessageBoxButtons.YesNo);
+            if (string.IsNullOrWhiteSpace(txtMaSV.Text))
+            {
+                MessageBox.Show("Vui lòng chọn sinh viên để xóa.");
+                return;
+            }
+
+            DialogResult r = MessageBox.Show("Bạn có chắc chắn muốn xóa?", "Xác nhận", MessageBoxButtons.YesNo);
             if (r == DialogResult.Yes)
             {
-                string sql = $"DELETE FROM SinhVien WHERE ma_sinh_vien = '{txtMaSV.Text}'";
-                kn.Thucthi(sql);
-                LoadData();
+                try
+                {
+                    string sql = $"EXEC XoaSinhVien {txtMaSV.Text}";
+                    kn.Thucthi(sql);
+                    LoadData();
+                    MessageBox.Show("Xóa thành công!");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi khi xóa: {ex.Message}");
+                }
             }
         }
 
@@ -103,12 +124,21 @@ namespace quanLyktx
             string sql = "";
             if (rdoMaSV.Checked)
             {
-                sql = $"SELECT * FROM SinhVien WHERE ma_sinh_vien = '{txtTimKiemMa.Text}'";
+                if (string.IsNullOrWhiteSpace(txtTimKiemMa.Text))
+                {
+                    MessageBox.Show("Nhập mã sinh viên để tìm!");
+                    return;
+                }
+                sql = $"EXEC TimKiemSinhVien 'ma', '{txtTimKiemMa.Text}'";
             }
-
             else if (rdoTenSV.Checked)
             {
-                sql = $"SELECT * FROM SinhVien WHERE ho_ten LIKE N'%{txtTimKiemTen.Text}%'";
+                if (string.IsNullOrWhiteSpace(txtTimKiemTen.Text))
+                {
+                    MessageBox.Show("Nhập tên sinh viên để tìm!");
+                    return;
+                }
+                sql = $"EXEC TimKiemSinhVien 'ten', N'{txtTimKiemTen.Text}'";
             }
 
             dgvDichvu.DataSource = kn.Lay_DulieuBang(sql);

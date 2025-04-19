@@ -721,12 +721,134 @@ EXEC DeleteComplaint 1;
 
 EXEC GetAllStudents;
 
+CREATE PROCEDURE XemDanhSachPhong
+AS
+BEGIN
+    SELECT * FROM Phong
+END
 
+CREATE PROCEDURE XemDanhSachPhongTheoMa
+    @ma_phong INT
+AS
+BEGIN
+    SELECT * FROM Phong WHERE ma_phong = @ma_phong
+END
 
+CREATE PROCEDURE ThemPhong
+    @so_phong NVARCHAR(10),
+    @suc_chua INT,
+    @so_nguoi_hien_tai INT,
+    @gia DECIMAL(10,2)
+AS
+BEGIN
+    INSERT INTO Phong (so_phong, suc_chua, so_nguoi_hien_tai, gia)
+    VALUES (@so_phong, @suc_chua, @so_nguoi_hien_tai, @gia)
+END
 
+CREATE PROCEDURE CapNhatPhong
+    @ma_phong INT,
+    @so_phong NVARCHAR(10),
+    @suc_chua INT,
+    @so_nguoi_hien_tai INT,
+    @gia DECIMAL(10,2)
+AS
+BEGIN
+    UPDATE Phong
+    SET so_phong = @so_phong,
+        suc_chua = @suc_chua,
+        so_nguoi_hien_tai = @so_nguoi_hien_tai,
+        gia = @gia
+    WHERE ma_phong = @ma_phong
+END
 
+CREATE PROCEDURE XoaPhong
+    @ma_phong INT
+AS
+BEGIN
+    DELETE FROM Phong WHERE ma_phong = @ma_phong
+END
 
+CREATE VIEW v_DanhSachSinhVien AS
+SELECT 
+    ma_sinh_vien, ho_ten, gioi_tinh, ngay_sinh, dien_thoai, email
+FROM 
+    SinhVien;
 
+CREATE PROCEDURE TimKiemSinhVien
+    @loai NVARCHAR(20),
+    @giatri NVARCHAR(100)
+AS
+BEGIN
+    IF @loai = 'ma'
+        SELECT * FROM SinhVien WHERE ma_sinh_vien = @giatri
+    ELSE IF @loai = 'ten'
+        SELECT * FROM SinhVien WHERE ho_ten LIKE '%' + @giatri + '%'
+END
 
+CREATE TRIGGER trg_KiemTraEmailTrung
+ON SinhVien
+INSTEAD OF INSERT
+AS
+BEGIN
+    IF EXISTS (SELECT 1 FROM SinhVien s INNER JOIN inserted i ON s.email = i.email)
+    BEGIN
+        RAISERROR('Email đã tồn tại.', 16, 1);
+        ROLLBACK;
+        RETURN;
+    END
 
+    INSERT INTO SinhVien (ho_ten, gioi_tinh, ngay_sinh, dien_thoai, email)
+    SELECT ho_ten, gioi_tinh, ngay_sinh, dien_thoai, email FROM inserted
+END
 
+CREATE VIEW vw_DanhSachThueTraPhong AS
+SELECT * FROM THUETRAPHONG;
+
+CREATE PROCEDURE sp_ThemThuePhong
+    @ma_phong NVARCHAR(10),
+    @so_phong NVARCHAR(10),
+    @khoang_thoi_gian NVARCHAR(100),
+    @tinh_tu_ngay DATE,
+    @ma_sinh_vien NVARCHAR(10),
+    @gioi_tinh NVARCHAR(10)
+AS
+BEGIN
+    INSERT INTO THUETRAPHONG (ma_phong, so_phong, khoang_thoi_gian, tinh_tu_ngay, ma_sinh_vien, gioi_tinh)
+    VALUES (@ma_phong, @so_phong, @khoang_thoi_gian, @tinh_tu_ngay, @ma_sinh_vien, @gioi_tinh)
+END;
+
+CREATE PROCEDURE sp_CapNhatThuePhong
+    @ma_phong NVARCHAR(10),
+    @so_phong NVARCHAR(10),
+    @khoang_thoi_gian NVARCHAR(100),
+    @tinh_tu_ngay DATE,
+    @ma_sinh_vien NVARCHAR(10),
+    @gioi_tinh NVARCHAR(10)
+AS
+BEGIN
+    UPDATE THUETRAPHONG 
+    SET so_phong = @so_phong, 
+        khoang_thoi_gian = @khoang_thoi_gian, 
+        tinh_tu_ngay = @tinh_tu_ngay,
+        gioi_tinh = @gioi_tinh
+    WHERE ma_phong = @ma_phong AND ma_sinh_vien = @ma_sinh_vien
+END;
+
+CREATE PROCEDURE sp_XoaThuePhong
+    @ma_phong NVARCHAR(10),
+    @ma_sinh_vien NVARCHAR(10)
+AS
+BEGIN
+    DELETE FROM THUETRAPHONG 
+    WHERE ma_phong = @ma_phong AND ma_sinh_vien = @ma_sinh_vien
+END;
+
+CREATE PROCEDURE sp_TimKiemThuePhong
+    @ma_phong NVARCHAR(10) = NULL,
+    @so_phong NVARCHAR(10) = NULL
+AS
+BEGIN
+    SELECT * FROM THUETRAPHONG
+    WHERE (@ma_phong IS NULL OR ma_phong = @ma_phong)
+      AND (@so_phong IS NULL OR so_phong = @so_phong)
+END;

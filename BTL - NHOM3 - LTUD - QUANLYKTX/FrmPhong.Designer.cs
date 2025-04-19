@@ -255,17 +255,18 @@
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(266, 30);
             this.textBox6.TabIndex = 31;
+            this.textBox6.TextChanged += new System.EventHandler(this.textBox6_TextChanged);
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.6F);
-            this.label6.Location = new System.Drawing.Point(60, 247);
+            this.label6.Location = new System.Drawing.Point(70, 241);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(114, 25);
+            this.label6.Size = new System.Drawing.Size(158, 25);
             this.label6.TabIndex = 34;
-            this.label6.Text = "Mã  phòng";
+            this.label6.Text = "Nhập thông tin:";
             // 
             // FrmPhong
             // 

@@ -17,3 +17,22 @@ D:\Download 2.0\BTL - Lập trình ứng dụng\QuanlyKhuKTXCS\obj\Debug\BTL_NHO
 D:\Download 2.0\BTL - Lập trình ứng dụng\QuanlyKhuKTXCS\obj\Debug\BTL_NHOM3_LTUD.csproj.CoreCompileInputs.cache
 D:\Download 2.0\BTL - Lập trình ứng dụng\QuanlyKhuKTXCS\obj\Debug\quanLyktx.exe
 D:\Download 2.0\BTL - Lập trình ứng dụng\QuanlyKhuKTXCS\obj\Debug\quanLyktx.pdb
+D:\Download 2.0\BTL - Lập trình ứng dụng\BTL - NHOM3 - LTUD - QUANLYKTX\bin\Debug\quanLyktx.exe.config
+D:\Download 2.0\BTL - Lập trình ứng dụng\BTL - NHOM3 - LTUD - QUANLYKTX\bin\Debug\quanLyktx.exe
+D:\Download 2.0\BTL - Lập trình ứng dụng\BTL - NHOM3 - LTUD - QUANLYKTX\bin\Debug\quanLyktx.pdb
+D:\Download 2.0\BTL - Lập trình ứng dụng\BTL - NHOM3 - LTUD - QUANLYKTX\obj\Debug\BTL_NHOM3_LTUD.csproj.AssemblyReference.cache
+D:\Download 2.0\BTL - Lập trình ứng dụng\BTL - NHOM3 - LTUD - QUANLYKTX\obj\Debug\quanLyktx.FrmDangKyDichVu.resources
+D:\Download 2.0\BTL - Lập trình ứng dụng\BTL - NHOM3 - LTUD - QUANLYKTX\obj\Debug\quanLyktx.FrmDangnhap.resources
+D:\Download 2.0\BTL - Lập trình ứng dụng\BTL - NHOM3 - LTUD - QUANLYKTX\obj\Debug\quanLyktx.FrmDichVu.resources
+D:\Download 2.0\BTL - Lập trình ứng dụng\BTL - NHOM3 - LTUD - QUANLYKTX\obj\Debug\quanLyktx.FrmHoaDon.resources
+D:\Download 2.0\BTL - Lập trình ứng dụng\BTL - NHOM3 - LTUD - QUANLYKTX\obj\Debug\quanLyktx.FrmKhieuNai.resources
+D:\Download 2.0\BTL - Lập trình ứng dụng\BTL - NHOM3 - LTUD - QUANLYKTX\obj\Debug\quanLyktx.FrmPhong.resources
+D:\Download 2.0\BTL - Lập trình ứng dụng\BTL - NHOM3 - LTUD - QUANLYKTX\obj\Debug\quanLyktx.FrmQuenMatKhau.resources
+D:\Download 2.0\BTL - Lập trình ứng dụng\BTL - NHOM3 - LTUD - QUANLYKTX\obj\Debug\quanLyktx.FrmSinhVien.resources
+D:\Download 2.0\BTL - Lập trình ứng dụng\BTL - NHOM3 - LTUD - QUANLYKTX\obj\Debug\quanLyktx.FrmThueTraPhong.resources
+D:\Download 2.0\BTL - Lập trình ứng dụng\BTL - NHOM3 - LTUD - QUANLYKTX\obj\Debug\quanLyktx.FrmTongQuan.resources
+D:\Download 2.0\BTL - Lập trình ứng dụng\BTL - NHOM3 - LTUD - QUANLYKTX\obj\Debug\quanLyktx.Properties.Resources.resources
+D:\Download 2.0\BTL - Lập trình ứng dụng\BTL - NHOM3 - LTUD - QUANLYKTX\obj\Debug\BTL_NHOM3_LTUD.csproj.GenerateResource.cache
+D:\Download 2.0\BTL - Lập trình ứng dụng\BTL - NHOM3 - LTUD - QUANLYKTX\obj\Debug\BTL_NHOM3_LTUD.csproj.CoreCompileInputs.cache
+D:\Download 2.0\BTL - Lập trình ứng dụng\BTL - NHOM3 - LTUD - QUANLYKTX\obj\Debug\quanLyktx.exe
+D:\Download 2.0\BTL - Lập trình ứng dụng\BTL - NHOM3 - LTUD - QUANLYKTX\obj\Debug\quanLyktx.pdb
